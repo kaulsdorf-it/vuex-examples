@@ -35,10 +35,26 @@
       </v-row>
     </template>
 
-    <v-pagination
-      :length="pages"
-      v-model="page"
-    />
+    <span v-show="false">{{events}}</span>
+
+    <v-row>
+      <v-col cols="10">
+        <v-pagination
+          :length="pages"
+          v-model="page"
+        />
+      </v-col>
+
+      <v-col cols="2">
+        <v-select
+          :items="[3,6,9,12,15,18,21]"
+          dense
+          filled
+          label="Items per Page"
+          v-model="itemsPerPage"
+        />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -64,8 +80,8 @@
       }),
       itemsOfPage() {
         const start = (this.getPage - 1) * this.getItemsPerPage
-        const end = this.getPage * this.getItemsPerPage - 1
-        return this.events.filter((a, idx) => idx >= start && idx <= end)
+        const end = this.getPage * this.getItemsPerPage
+        return this.events.slice(start, end)
       },
       page: {
         get() {
@@ -73,6 +89,15 @@
         },
         set(newPage) {
           this.setPage(newPage)
+        },
+      },
+      itemsPerPage: {
+        get() {
+          return this.getItemsPerPage
+        },
+        set(newValue) {
+          this.setItemsPerPage(newValue)
+          this.page = 1
         },
       },
       pages() {
@@ -93,7 +118,7 @@
         this.hasLoaded = true
       }
 
-      window.setTimeout(load, 100)
+      window.setTimeout(load, 1000)
     },
 
     data: () => ({
@@ -106,7 +131,8 @@
       }),
       ...mapMutations({
         setPage: 'paging/setPageMutation',
-      })
+        setItemsPerPage: 'paging/setItemsPerPageMutation',
+      }),
     },
 
     name: 'Events',
@@ -114,7 +140,7 @@
     watch: {
       events() {
         this.hasLoaded = true
-      }
-    }
+      },
+    },
   }
 </script>
