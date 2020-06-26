@@ -16,7 +16,7 @@
     <template v-else>
       <v-row>
         <v-col>
-          <v-chip class="white--text" color="blue-grey" label>Anzahl Events: {{ events.length }}</v-chip>
+          <ShowTotal/>
         </v-col>
 
         <v-col :key="type" v-for="type of types">
@@ -30,20 +30,27 @@
         <event
           :event="event"
           :key="idx"
-          v-for="(event, idx) of events"
+          v-for="(event, idx) of itemsOfPage"
         />
       </v-row>
     </template>
+
+    <v-pagination
+      :length="pages"
+      v-model="page"
+    />
   </v-container>
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions, mapGetters, mapMutations } from 'vuex'
   import Event from './event'
+  import ShowTotal from './show-total'
 
   export default {
     components: {
       Event,
+      ShowTotal,
     },
 
     computed: {
@@ -52,12 +59,25 @@
         types: 'events/getTypes',
         getTotalByType: 'events/getTotalByType',
         getNumberOfPages: 'paging/getNumberOfPages',
-        page: 'paging/getPage',
+        getPage: 'paging/getPage',
         getItemsPerPage: 'paging/getItemsPerPage',
       }),
+      itemsOfPage() {
+        const start = (this.getPage - 1) * this.getItemsPerPage
+        const end = this.getPage * this.getItemsPerPage - 1
+        return this.events.filter((a, idx) => idx >= start && idx <= end)
+      },
+      page: {
+        get() {
+          return this.getPage
+        },
+        set(newPage) {
+          this.setPage(newPage)
+        },
+      },
       pages() {
         return this.getNumberOfPages(this.events.length)
-      }
+      },
     },
 
     created() {
@@ -84,6 +104,9 @@
       ...mapActions({
         loadEvents: 'events/loadAction',
       }),
+      ...mapMutations({
+        setPage: 'paging/setPageMutation',
+      })
     },
 
     name: 'Events',

@@ -1,9 +1,9 @@
 <template>
   <v-footer app class="pl-2 pr-2" color="blue-grey darken-1" dark style="height: 36px">
     <v-spacer/>
-    <temlate v-if="$route.name === 'events'">
+    <template v-if="$route.name === 'events'">
       Seite {{ page }} von {{ pages }}
-    </temlate>
+    </template>
     <v-spacer/>
   </v-footer>
 </template>
