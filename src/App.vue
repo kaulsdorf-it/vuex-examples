@@ -5,6 +5,7 @@
       <v-spacer/>
       <v-btn class="ml-2" text to="/about">About</v-btn>
       <v-btn class="ml-2" text to="/events">Events</v-btn>
+      <v-btn :to="{ name: 'manage-users' }" class="ml-2" text>Userverwaltung</v-btn>
     </v-app-bar>
 
     <v-main>

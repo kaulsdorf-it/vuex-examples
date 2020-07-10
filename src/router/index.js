@@ -13,12 +13,31 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
   },
   {
     path: '/events',
     name: 'events',
-    component: () => import(/* webpackChunkName: "about" */ '../components/events')
+    component: () => import( '../components/events')
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('../components/router-page'),
+    children: [
+      {
+        path: '/manage-users',
+        name: 'manage-users',
+        component: () => import('../components/admin/manage-users'),
+        children: [
+          {
+            path: '/manage-single-users/:userId',
+            name: 'manage-single-user',
+            component: () => import( '../components/admin/manage-users/manage-single-user'),
+          }
+        ]
+      }
+    ],
   },
 ]
 
